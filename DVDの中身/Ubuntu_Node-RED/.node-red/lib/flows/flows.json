@@ -1,0 +1,277 @@
+[
+    {
+        "id": "457e9b2b0792f56f",
+        "type": "tab",
+        "label": "フロー 2",
+        "disabled": true,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "e87a64d08f0b8d89",
+        "type": "sqlite",
+        "z": "457e9b2b0792f56f",
+        "mydb": "23999a5a992bcb04",
+        "sqlquery": "msg.topic",
+        "sql": "",
+        "name": "hands",
+        "x": 90,
+        "y": 180,
+        "wires": [
+            [
+                "5876d269a56a1a09"
+            ]
+        ]
+    },
+    {
+        "id": "503c8ded73eea667",
+        "type": "ui_chart",
+        "z": "457e9b2b0792f56f",
+        "name": "",
+        "group": "62e4de27b84aadad",
+        "order": 2,
+        "width": "5",
+        "height": "5",
+        "label": "開く筋電位",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss.sss",
+        "interpolate": "linear",
+        "nodata": "ここにグラフが表示されます。",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "1500",
+        "removeOlder": "5",
+        "removeOlderPoints": "",
+        "removeOlderUnit": "1",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d72828",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 160,
+        "y": 440,
+        "wires": [
+            []
+        ],
+        "info": "# テスト\n"
+    },
+    {
+        "id": "5876d269a56a1a09",
+        "type": "function",
+        "z": "457e9b2b0792f56f",
+        "name": "function 4",
+        "func": "//var enabled = flow.get(\"PLOT_DASHBOARD\");\n//if (enabled){\n//flow.payload={\n//    1: \"閉じる\",\n//    2: \"開く\",\n//    3: \"止まる\"\n//}\n\n    for (var i=0; i < msg.payload.length; i++){\n        var ts = new Date(msg.payload[i].Timestamp)\n        var temMsg1 = {\n            payload: msg.payload[i].Va,\n            timestamp: ts\n        }\n        temMsg1.topic='Va';\n        node.send(temMsg1);\n        \n        var temMsg2 = {\n            payload: msg.payload[i].Vb,\n            timestamp: ts\n        }\n        temMsg2.topic='Vb';\n        node.send(temMsg2)\n        \n//var close = flow.payload(\"閉じる\");\n//var open = flow.payload(\"開く\");\n//var stop = flow.payload(\"止まる\");\n\n        if(temMsg1>temMsg2)\n        {\n            node.send(close);\n        }\n        if(temMsg1<temMsg2)\n        {\n            node.send(open)\n        }\n        if(temMsg1==temMsg2)\n        {\n            node.send(stop)\n        }\n    }\n//}",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 3,
+        "initialize": "// ここに記述したコードは、ノードをデプロイした時に\n// 一度だけ実行されます。\n0",
+        "finalize": "",
+        "libs": [],
+        "x": 100,
+        "y": 260,
+        "wires": [
+            [
+                "a653072304cc0ba3"
+            ]
+        ]
+    },
+    {
+        "id": "2c2f598a53e2a28a",
+        "type": "ui_button",
+        "z": "457e9b2b0792f56f",
+        "name": "",
+        "group": "62e4de27b84aadad",
+        "order": 1,
+        "width": "6",
+        "height": "1",
+        "passthru": false,
+        "label": "リセット",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 240,
+        "y": 120,
+        "wires": [
+            [
+                "f62149200c274f28"
+            ]
+        ]
+    },
+    {
+        "id": "f62149200c274f28",
+        "type": "function",
+        "z": "457e9b2b0792f56f",
+        "name": "function 5",
+        "func": "msg.payload=[];\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 280,
+        "y": 260,
+        "wires": [
+            [
+                "503c8ded73eea667",
+                "83fae3a06f875282"
+            ]
+        ]
+    },
+    {
+        "id": "83fae3a06f875282",
+        "type": "ui_chart",
+        "z": "457e9b2b0792f56f",
+        "name": "",
+        "group": "62e4de27b84aadad",
+        "order": 3,
+        "width": "5",
+        "height": "5",
+        "label": "閉じる筋電位",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss.sss",
+        "interpolate": "linear",
+        "nodata": "ここにグラフが表示されます",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "1500",
+        "removeOlder": "5",
+        "removeOlderPoints": "",
+        "removeOlderUnit": "1",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 170,
+        "y": 500,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "a653072304cc0ba3",
+        "type": "switch",
+        "z": "457e9b2b0792f56f",
+        "name": "",
+        "property": "topic",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "Va",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "Vb",
+                "vt": "str"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 3,
+        "x": 110,
+        "y": 340,
+        "wires": [
+            [
+                "503c8ded73eea667"
+            ],
+            [
+                "83fae3a06f875282"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "55b0a45ba9bd6ef2",
+        "type": "inject",
+        "z": "457e9b2b0792f56f",
+        "d": true,
+        "name": "test2",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "0.5",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "select * from (select * from hands order by id desc limit 10 ) as A order by id;",
+        "payload": "",
+        "payloadType": "date",
+        "x": 90,
+        "y": 120,
+        "wires": [
+            [
+                "e87a64d08f0b8d89"
+            ]
+        ]
+    },
+    {
+        "id": "23999a5a992bcb04",
+        "type": "sqlitedb",
+        "db": "/opt/sqlite/tool/test4.db",
+        "mode": "RO"
+    },
+    {
+        "id": "62e4de27b84aadad",
+        "type": "ui_group",
+        "name": "リセット",
+        "tab": "9adf240d8525974b",
+        "order": 1,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "9adf240d8525974b",
+        "type": "ui_tab",
+        "name": "筋電モニター",
+        "icon": "dashboard",
+        "order": 1,
+        "disabled": false,
+        "hidden": false
+    }
+]
