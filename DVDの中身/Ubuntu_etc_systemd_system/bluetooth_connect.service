@@ -1,0 +1,10 @@
+[Unit]
+Description=bluetooth service
+
+[Service]
+ExecStart=/bin/bash /home/tetsuhiro/28800.sh
+type=simple
+
+[Install]
+WantedBy=multi-user.target
+
